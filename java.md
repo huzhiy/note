@@ -1,5 +1,7 @@
 JAVA笔记
 
+关键字：transient-被修饰的变量则不能序列化
+
 集合ArrayList<E>和LinkedList<E>的区别(参考:https://mp.weixin.qq.com/s/g1E3GQU1JJzpAxV4zwRKgg和https://mp.weixin.qq.com/s/oA0D1BjzBi7z0Xuvt4O-PQ)：
 
 1、顺序插入速度ArrayList会比较快，因为ArrayList是基于数组实现的，数组是事先new好的，只要往指定位置塞一个数据就好了；LinkedList则不同，每次顺序插入的时候LinkedList将new一个对象出来，如果对象比较大，那么new的时间势必会长一点，再加上一些引用赋值的操作，所以顺序插入LinkedList必然慢于ArrayList
@@ -171,4 +173,58 @@ ArrayList是线程非安全的，这很明显，因为ArrayList中所有的方�
 2、减小了序列化之后的文件大小
 
 
+
+**HashMap和Hashtable的区别**
+
+
+
+HashMap和Hashtable是一组相似的键值对集合，它们的区别也是面试常被问的问题之一，我这里简单总结一下HashMap和Hashtable的区别：
+
+
+
+1、Hashtable是线程安全的，Hashtable所有对外提供的方法都使用了synchronized，也就是同步，而HashMap则是线程非安全的
+
+
+
+2、Hashtable不允许空的value，空的value将导致空指针异常，而HashMap则无所谓，没有这方面的限制
+
+
+
+3、上面两个缺点是最主要的区别，另外一个区别无关紧要，我只是提一下，就是两个的rehash算法不同，Hashtable的是：
+
+
+
+> private int hash(Object k) {
+>
+>   // hashSeed will be zero if alternative hashing is disabled.
+>
+>   return hashSeed ^ k.hashCode();
+>
+> }
+
+
+
+这个hashSeed是使用sun.misc.Hashing类的randomHashSeed方法产生的。HashMap的rehash算法上面看过了，也就是：
+
+
+
+> static int hash(int h) {
+>
+>   // This function ensures that hashCodes that differ only by
+>
+>   // constant multiples at each bit position have a bounded
+>
+>   // number of collisions (approximately 8 at default load factor).
+>
+>   h ^= (h >>> 20) ^ (h >>> 12);
+>
+>   return h ^ (h >>> 7) ^ (h >>> 4);
+>
+> }
+
+
+
+LinkedhashMap（双向链表结构）会记录他的下一个元素和前一个插入的元素和后一个插入元素；根据前一个插入元素和后一个插入元素来实现排序
+
+LRU算法缓存原理：本次访问的数据会放到最后面，那么访问次数最少的会在第一位，然后删除第一位即可
 
